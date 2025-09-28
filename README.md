@@ -14,7 +14,7 @@
 
 - **Frontend**: Next.js 15 (App Router) + TypeScript
 - **UI**: TailwindCSS + shadcn/ui
-- **Database**: Prisma ORM + SQLite
+- **Database**: Prisma ORM + PostgreSQL (Supabase)
 - **Auth**: NextAuth.js
 - **Payments**: Stripe Checkout
 - **Deployment**: Vercel
@@ -34,7 +34,15 @@ cd krakow-guides-prototype_4
 npm install
 ```
 
-### 3. Настройка переменных окружения
+### 3. Настройка Supabase
+
+1. Создайте аккаунт на [supabase.com](https://supabase.com)
+2. Создайте новый проект
+3. Перейдите в **Settings** → **Database**
+4. Скопируйте **Connection string** (URI)
+5. Замените `[YOUR-PASSWORD]` на пароль из настроек проекта
+
+### 4. Настройка переменных окружения
 
 Скопируйте `.env.example` в `.env` и заполните необходимые переменные:
 
@@ -43,23 +51,23 @@ cp .env.example .env
 ```
 
 Обязательные переменные:
-- `DATABASE_URL` - URL базы данных SQLite
+- `DATABASE_URL` - Connection string Supabase PostgreSQL
 - `NEXTAUTH_SECRET` - секретный ключ для NextAuth
 - `NEXTAUTH_URL` - URL приложения
 - `STRIPE_SECRET_KEY` - секретный ключ Stripe (тестовый)
 - `STRIPE_PUBLISHABLE_KEY` - публичный ключ Stripe (тестовый)
 
-### 4. Настройка базы данных
+### 5. Настройка базы данных
 
 ```bash
-# Создание базы данных
-npx prisma db push
+# Создание таблиц в PostgreSQL
+npm run db:push
 
 # Заполнение тестовыми данными
-npx tsx prisma/seed.ts
+npm run db:seed
 ```
 
-### 5. Запуск приложения
+### 6. Запуск приложения
 
 ```bash
 npm run dev
@@ -112,9 +120,49 @@ src/
 
 ## Деплой на Vercel
 
+### 1. Подготовка Supabase
+
+1. Создайте проект на [supabase.com](https://supabase.com)
+2. Скопируйте **Connection string** из Settings → Database
+3. Замените `[YOUR-PASSWORD]` на пароль проекта
+
+### 2. Настройка Vercel
+
 1. Подключите репозиторий к Vercel
-2. Добавьте переменные окружения в настройках проекта
+2. Добавьте переменные окружения:
+   - `DATABASE_URL` - Connection string Supabase
+   - `NEXTAUTH_URL` - URL вашего Vercel проекта
+   - `NEXTAUTH_SECRET` - случайная строка
+   - `STRIPE_SECRET_KEY` - тестовый ключ Stripe
+   - `STRIPE_PUBLISHABLE_KEY` - публичный ключ Stripe
 3. Деплой произойдет автоматически
+
+### 3. Инициализация базы данных
+
+После деплоя выполните:
+
+```bash
+# В терминале Vercel или локально с продакшен DATABASE_URL
+npm run db:push
+npm run db:seed
+```
+
+## Полезные команды
+
+```bash
+# Работа с базой данных
+npm run db:push      # Синхронизация схемы с БД
+npm run db:migrate   # Создание миграций
+npm run db:seed      # Заполнение тестовыми данными
+npm run db:studio    # Открыть Prisma Studio
+npm run db:generate  # Генерация Prisma Client
+
+# Разработка
+npm run dev          # Запуск в режиме разработки
+npm run build        # Сборка для продакшена
+npm run start        # Запуск продакшен версии
+npm run lint         # Проверка кода
+```
 
 ## Разработка
 
@@ -122,7 +170,7 @@ src/
 
 1. Добавьте запись в базу данных через Prisma Studio:
 ```bash
-npx prisma studio
+npm run db:studio
 ```
 
 2. Или создайте скрипт в `prisma/seed.ts`

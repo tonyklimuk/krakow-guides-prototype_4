@@ -1,7 +1,11 @@
-import { prisma } from "@/lib/prisma"
+import { PrismaClient } from "@prisma/client"
+
+const prisma = new PrismaClient()
 
 async function seedDatabase() {
   try {
+    console.log("🌱 Seeding database...")
+
     // Create sample guide
     const guide = await prisma.guide.create({
       data: {
@@ -138,19 +142,23 @@ async function seedDatabase() {
       }
     })
 
-    console.log("Guide created:", guide.title)
+    console.log("✅ Guide created:", guide.title)
+    console.log("🎉 Database seeded successfully!")
   } catch (error) {
-    console.error("Error seeding database:", error)
+    console.error("❌ Error seeding database:", error)
+    throw error
+  } finally {
+    await prisma.$disconnect()
   }
 }
 
 // Run the seed function
 seedDatabase()
   .then(() => {
-    console.log("Database seeded successfully")
+    console.log("✅ Seeding completed successfully")
     process.exit(0)
   })
   .catch((error) => {
-    console.error("Seeding failed:", error)
+    console.error("❌ Seeding failed:", error)
     process.exit(1)
   })
