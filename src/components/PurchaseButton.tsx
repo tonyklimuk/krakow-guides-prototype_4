@@ -21,6 +21,11 @@ export function PurchaseButton({ guideId, price, title }: PurchaseButtonProps) {
   const router = useRouter()
 
   const handlePurchase = async () => {
+    if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
+      console.error("Stripe publishable key not configured")
+      return
+    }
+
     if (!session) {
       router.push("/auth/signin")
       return
