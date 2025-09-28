@@ -1,4 +1,4 @@
-import { getServerSession } from "next-auth"
+import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import Link from "next/link"
-import { signOut } from "next-auth/react"
+
 import { LogOut, User, BookOpen, Calendar } from "lucide-react"
 import { formatPrice } from "@/lib/stripe"
 
@@ -98,7 +98,7 @@ async function UserPurchases({ userId }: { userId: string }) {
 }
 
 export default async function Dashboard() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession(authOptions) as any
 
   if (!session?.user?.id) {
     redirect("/auth/signin")

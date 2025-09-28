@@ -1,4 +1,4 @@
-import { getServerSession } from "next-auth"
+import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
@@ -17,7 +17,7 @@ interface GuidePageProps {
   }
 }
 
-async function GuideContent({ guide }: { guide: any }) {
+async function GuideContent({ guide }: { guide: { id: string; title: string; content: string } }) {
   const hasAccess = true // For MVP, we'll show content to everyone
 
   if (!hasAccess) {
@@ -52,7 +52,7 @@ async function GuideContent({ guide }: { guide: any }) {
 }
 
 export default async function GuidePage({ params }: GuidePageProps) {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession(authOptions) as any
   
   const guide = await prisma.guide.findUnique({
     where: { slug: params.slug }

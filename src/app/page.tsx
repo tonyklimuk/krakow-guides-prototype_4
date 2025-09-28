@@ -1,16 +1,16 @@
 import { Suspense } from "react"
-import { getServerSession } from "next-auth"
+import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { formatPrice } from "@/lib/stripe"
 import Link from "next/link"
 import Image from "next/image"
 import { MapPin, Star, Users, Clock } from "lucide-react"
 
-async function GuideCard({ guide }: { guide: any }) {
+async function GuideCard({ guide }: { guide: { id: string; title: string; description: string; price: number; coverImage: string; slug: string } }) {
   return (
     <Card className="w-full max-w-sm mx-auto overflow-hidden">
       <div className="relative h-48">
@@ -67,7 +67,7 @@ async function GuidesSection() {
 }
 
 export default async function Home() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession(authOptions) as any
 
   return (
     <div className="min-h-screen">

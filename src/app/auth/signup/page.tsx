@@ -68,7 +68,7 @@ export default function SignUp() {
         const data = await response.json()
         setError(data.error || "Ошибка при регистрации")
       }
-    } catch (error) {
+    } catch {
       setError("Произошла ошибка при регистрации")
     } finally {
       setIsLoading(false)
@@ -79,7 +79,7 @@ export default function SignUp() {
     setIsLoading(true)
     try {
       await signIn(provider, { callbackUrl: "/dashboard" })
-    } catch (error) {
+    } catch {
       setError("Ошибка при регистрации через " + provider)
       setIsLoading(false)
     }
