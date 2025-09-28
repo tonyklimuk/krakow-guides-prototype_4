@@ -12,7 +12,8 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",
     "db:generate": "prisma generate",
-    "generate-secret": "node scripts/generate-secret.js"
+    "generate-secret": "node scripts/generate-secret.js",
+    "setup-db": "node scripts/setup-db.js"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",

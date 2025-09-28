@@ -6,6 +6,16 @@ async function seedDatabase() {
   try {
     console.log("🌱 Seeding database...")
 
+    // Check if guide already exists
+    const existingGuide = await prisma.guide.findUnique({
+      where: { slug: "krakow-complete-guide" }
+    })
+
+    if (existingGuide) {
+      console.log("✅ Guide already exists, skipping seed")
+      return
+    }
+
     // Create sample guide
     const guide = await prisma.guide.create({
       data: {
