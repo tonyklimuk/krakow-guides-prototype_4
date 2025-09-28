@@ -1,11 +1,9 @@
-
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import CredentialsProvider from "next-auth/providers/credentials"
 import GoogleProvider from "next-auth/providers/google"
 import AppleProvider from "next-auth/providers/apple"
 import FacebookProvider from "next-auth/providers/facebook"
 import { prisma } from "@/lib/prisma"
-
 
 export const authOptions: any = {
   adapter: PrismaAdapter(prisma),
@@ -74,4 +72,5 @@ export const authOptions: any = {
       return session
     },
   },
+  secret: process.env.NEXTAUTH_SECRET || "development-secret-key",
 }
